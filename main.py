@@ -1,6 +1,7 @@
 _author__ = 'alex'
 import sys
 import xml.dom.minidom as dom
+from floyd import floyd_algs
 
 def get_Res_Matrix(length,nodes,nets_d,elem_type):
     Res = [[[] for j in range(length)] for i in range(length)]
@@ -18,6 +19,22 @@ def get_Res_Matrix(length,nodes,nets_d,elem_type):
                 res = (float)(nodes[i].getAttribute("resistance"))
                 Res[net_from][net_to].append(res)
                 Res[net_to][net_from].append(res)
+    for i in range(len(Res)):
+        print (Res[i])
+        for j in range(length):
+            res = 0
+            if i != j:
+                a = Res[i][j]
+                if len(a) == 0: res = 0
+                else:
+                    if len(a) == 1: res = a[0]
+                    else:
+                        for item in a:
+                            if item <= 0: res = 0; break
+                            res += 1 / item
+                        res = 1 / res
+            Res[i][j] = res
+    print (Res)
     return Res
 
 def parse_xml():
@@ -38,10 +55,14 @@ def parse_xml():
         length += 1
     return nodes,nets_d,elem_type,length
 if __name__ == "__main__":
-    if len(sys.argv) <> 3:
+    if len(sys.argv) != 3:
         print("check the arguments")
         exit()
 
     nodes,nets_d,elem_type,length = parse_xml()
     Res = get_Res_Matrix(length,nodes,nets_d,elem_type)
-    print Res
+    print (Res)
+    c_floyd = floyd_algs(Res)
+    print (c_floyd)
+
+
