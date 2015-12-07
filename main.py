@@ -20,7 +20,6 @@ def get_Res_Matrix(length,nodes,nets_d,elem_type):
                 Res[net_from][net_to].append(res)
                 Res[net_to][net_from].append(res)
     for i in range(len(Res)):
-        print (Res[i])
         for j in range(length):
             res = 0
             if i != j:
@@ -34,7 +33,7 @@ def get_Res_Matrix(length,nodes,nets_d,elem_type):
                             res += 1 / item
                         res = 1 / res
             Res[i][j] = res
-    print (Res)
+    #print (Res)
     return Res
 
 def parse_xml():
@@ -61,8 +60,12 @@ if __name__ == "__main__":
 
     nodes,nets_d,elem_type,length = parse_xml()
     Res = get_Res_Matrix(length,nodes,nets_d,elem_type)
-    print (Res)
+    #print (Res)
     c_floyd = floyd_algs(Res)
-    print (c_floyd)
+    #print ("c_floyd",c_floyd)
+    out = open(sys.argv[2], 'w')
+    for line in c_floyd:
+        out.write(','.join(map(str, [line[i] for i in range(0, len(line))])))
+        out.write('\n')
 
 
